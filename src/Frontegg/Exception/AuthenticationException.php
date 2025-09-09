@@ -2,7 +2,4 @@
 
 namespace Frontegg\Exception;
 
-class AuthenticationException extends FronteggSDKException
-{
-
-}
+class AuthenticationException extends FronteggSDKException {}

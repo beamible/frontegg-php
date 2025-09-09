@@ -7,11 +7,13 @@ use Frontegg\Config\Config;
 use Frontegg\Http\ApiRawResponse;
 use Frontegg\HttpClient\FronteggCurlHttpClient;
 use Frontegg\HttpClient\FronteggHttpClientInterface;
-use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 abstract class AuthenticatorTestCaseHelper extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @param FronteggHttpClientInterface $client
      * @param string                      $clientId
@@ -48,17 +50,17 @@ abstract class AuthenticatorTestCaseHelper extends TestCase
     }
 
     /**
-     * @param ApiRawResponse[] $authResponses
+     * @param array<ApiRawResponse> $authResponses
      *
-     * @return Stub|FronteggCurlHttpClient|FronteggHttpClientInterface
+     * @return FronteggHttpClientInterface
      */
     protected function createFronteggCurlHttpClientStub(
         array $authResponses = []
-    ): Stub {
+    ): FronteggHttpClientInterface {
         $client = $this->createStub(FronteggCurlHttpClient::class);
         $client->method('send')
             ->willReturnOnConsecutiveCalls(
-                ...$authResponses
+                ...array_values($authResponses)
             );
 
         return $client;

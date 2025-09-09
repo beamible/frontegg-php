@@ -5,23 +5,21 @@ namespace Frontegg\Proxy;
 use Frontegg\Authenticator\Authenticator;
 use Frontegg\Config\Config;
 use Frontegg\Exception\AuthenticationException;
-use Frontegg\Exception\UnexpectedValueException;
 use Frontegg\Http\ApiRawResponse;
 use Frontegg\Http\Uri;
-use Frontegg\HttpClient\FronteggHttpClientInterface;
 use Frontegg\Proxy\Adapter\AdapterInterface;
 use Frontegg\Proxy\Filters\FilterInterface;
 use Frontegg\Proxy\Filters\FronteggRequestAuthHeaderResolver;
 use Frontegg\Proxy\Filters\FronteggRequestHeaderResolver;
 use Frontegg\Proxy\Filters\FronteggRequestMethodResolver;
 use Frontegg\Proxy\Filters\FronteggResponseErrorResolver;
-use Frontegg\Proxy\Filters\FronteggSendRequestResolver;
+use Frontegg\Proxy\Filters\FronteggRetryRequestResolver;
 use Frontegg\Proxy\Filters\FronteggResponseHeaderResolver;
-use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
-use Relay\RelayBuilder;
 
 class Proxy
 {
@@ -90,14 +88,19 @@ class Proxy
 
         $request = $this->getOverridenRequest($target);
 
-        $relay = (new RelayBuilder())->newInstance($this->filters);
+        $stack = new HandlerStack($this->adapter);
+        foreach ($this->filters as $name => $middleware) {
+            $stack->push($middleware, $name);
+        }
 
-        $response = $relay($request, new Response());
+        $client = new Client([
+            'handler'     => $stack,
+            'http_errors' => false,
+        ]);
 
-        // @TODO: Refactor this later.
-        $apiRawResponse = $this->getAdaptedApiRawResponse($response);
+        $response = $client->sendRequest($request);
 
-        return $apiRawResponse;
+        return $this->getAdaptedApiRawResponse($response);
     }
 
     /**
@@ -181,18 +184,12 @@ class Proxy
     protected function getDefaultFilters(): array
     {
         return [
-            new FronteggRequestAuthHeaderResolver(
-                $this->authenticator,
-                $this->context
-            ),
-            new FronteggRequestHeaderResolver(),
-            new FronteggRequestMethodResolver(),
-            new FronteggSendRequestResolver(
-                $this->adapter,
-                $this->authenticator
-            ),
-            new FronteggResponseHeaderResolver(),
-            new FronteggResponseErrorResolver()
+            'frontegg_request_auth' => new FronteggRequestAuthHeaderResolver($this->authenticator, $this->context),
+            'frontegg_request_content' => new FronteggRequestHeaderResolver(),
+            'frontegg_request_method' => new FronteggRequestMethodResolver(),
+            'frontegg_request_retry' => new FronteggRetryRequestResolver($this->authenticator),
+            'frontegg_response_headers' => new FronteggResponseHeaderResolver(),
+            'frontegg_response_errors' => new FronteggResponseErrorResolver()
         ];
     }
 }

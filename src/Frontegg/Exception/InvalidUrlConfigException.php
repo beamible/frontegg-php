@@ -2,7 +2,4 @@
 
 namespace Frontegg\Exception;
 
-class InvalidUrlConfigException extends FronteggSDKException
-{
-
-}
+class InvalidUrlConfigException extends FronteggSDKException {}

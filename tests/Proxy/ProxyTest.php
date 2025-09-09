@@ -5,7 +5,6 @@ namespace Frontegg\Tests\Proxy;
 use Frontegg\Authenticator\Authenticator;
 use Frontegg\Http\ApiRawResponse;
 use Frontegg\HttpClient\FronteggHttpClientInterface;
-use Frontegg\Proxy\Adapter\FronteggHttpClient\FronteggAdapter;
 use Frontegg\Proxy\Proxy;
 use Frontegg\Tests\Helper\ProxyTestCaseHelper;
 use GuzzleHttp\Psr7\Request;
@@ -154,11 +153,11 @@ class ProxyTest extends ProxyTestCaseHelper
             '<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<title>Error</title>
+    <meta charset="utf-8">
+    <title>Error</title>
 </head>
 <body>
-<pre>Cannot GET /</pre>
+    <pre>Cannot GET /</pre>
 </body>
 </html>',
             404
@@ -168,9 +167,9 @@ class ProxyTest extends ProxyTestCaseHelper
             [
                 $authResponse,
                 $apiResponse,
-                clone($apiResponse),
-                clone($apiResponse),
-                clone($apiResponse),
+                clone ($apiResponse),
+                clone ($apiResponse),
+                clone ($apiResponse),
             ]
         );
         $contextResolver = function (RequestInterface $request) {

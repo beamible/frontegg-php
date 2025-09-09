@@ -17,12 +17,12 @@ class AuditProperties extends UseChannelDefaults implements AuditPropertiesInter
      * @var string[]
      */
     protected static $SEVERITY_ALLOWED_VALUES
-        = [
-            self::SEVERITY_INFO,
-            self::SEVERITY_MEDIUM,
-            self::SEVERITY_HIGH,
-            self::SEVERITY_CRITICAL,
-        ];
+    = [
+        self::SEVERITY_INFO,
+        self::SEVERITY_MEDIUM,
+        self::SEVERITY_HIGH,
+        self::SEVERITY_CRITICAL,
+    ];
 
     /**
      * Audit creation time. Default is the time audit accepted (now).

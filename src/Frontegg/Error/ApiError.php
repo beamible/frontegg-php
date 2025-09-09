@@ -34,7 +34,7 @@ class ApiError
     public function __construct(
         string $error,
         string $message,
-        int $statusCode = null
+        ?int $statusCode = null
     ) {
         $this->statusCode = $statusCode;
         $this->error = $error;

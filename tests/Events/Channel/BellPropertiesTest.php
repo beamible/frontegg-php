@@ -210,26 +210,26 @@ class BellPropertiesTest extends TestCase
                 "severity": "High",
                 "expiryDate": "2020-11-22 00:33:44",
                 "url": "https://open.in.the/blank/window",
-                "actions": [
-                    {
+                "actions": {
+                    "0": {
                         "name": "Action Name 1",
                         "url": "https://redirect.url/when/clicked/1",
                         "method": "GET",
                         "visualization": "Link"
                     },
-                    {
+                    "1": {
                         "name": "Action Name 2",
                         "url": "https://redirect.url/when/clicked/2",
                         "method": "POST",
                         "visualization": "Button"
                     },
-                    {
+                    "2": {
                         "name": "Action Name 3",
                         "url": "https://redirect.url/when/clicked/3",
                         "method": "PUT",
                         "visualization": "Button"
                     }
-                ]
+                }
             }',
             $json
         );

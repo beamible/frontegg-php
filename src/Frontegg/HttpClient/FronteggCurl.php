@@ -2,6 +2,8 @@
 
 namespace Frontegg\HttpClient;
 
+use CurlHandle;
+
 /**
  * Class FronteggCurl
  *
@@ -14,6 +16,7 @@ class FronteggCurl
 
     /**
      * @var resource Curl resource instance
+     * @var CurlHandle|false
      */
     protected $curl;
 

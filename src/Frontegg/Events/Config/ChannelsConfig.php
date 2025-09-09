@@ -17,7 +17,7 @@ class ChannelsConfig implements ChannelsConfigInterface
      *
      * @var WebHookBody|UseChannelDefaults|null
      */
-    protected $webHook;
+    protected WebHookBody|UseChannelDefaults|null $webHook;
 
     /**
      * Properties for this channel.
@@ -26,7 +26,7 @@ class ChannelsConfig implements ChannelsConfigInterface
      *
      * @var SlackChatPostMessageArgumentsInterface|UseChannelDefaults|null
      */
-    protected $slack;
+    protected SlackChatPostMessageArgumentsInterface|UseChannelDefaults|null $slack;
 
     /**
      * Properties for this channel.
@@ -35,7 +35,7 @@ class ChannelsConfig implements ChannelsConfigInterface
      *
      * @var WebPushPropertiesInterface|UseChannelDefaults|null
      */
-    protected $webPush;
+    protected WebPushPropertiesInterface|UseChannelDefaults|null $webPush;
 
     /**
      * Properties for this channel.
@@ -44,7 +44,7 @@ class ChannelsConfig implements ChannelsConfigInterface
      *
      * @var AuditPropertiesInterface|UseChannelDefaults|null
      */
-    protected $audit;
+    protected AuditPropertiesInterface|UseChannelDefaults|null $audit;
 
     /**
      * Properties for this channel.
@@ -53,7 +53,7 @@ class ChannelsConfig implements ChannelsConfigInterface
      *
      * @var BellPropertiesInterface|UseChannelDefaults|null
      */
-    protected $bell;
+    protected BellPropertiesInterface|UseChannelDefaults|null $bell;
 
     /**
      * ChannelsConfig constructor.
@@ -67,11 +67,11 @@ class ChannelsConfig implements ChannelsConfigInterface
      * @param SlackChatPostMessageArgumentsInterface|UseChannelDefaults|null $slack
      */
     public function __construct(
-        ?UseChannelDefaults $webHook = null,
-        ?UseChannelDefaults $webPush = null,
-        ?UseChannelDefaults $audit = null,
-        ?UseChannelDefaults $bell = null,
-        ?UseChannelDefaults $slack = null
+        WebHookBody|UseChannelDefaults|null                             $webHook = null,
+        WebPushPropertiesInterface|UseChannelDefaults|null              $webPush = null,
+        AuditPropertiesInterface|UseChannelDefaults|null                $audit = null,
+        BellPropertiesInterface|UseChannelDefaults|null                 $bell = null,
+        SlackChatPostMessageArgumentsInterface|UseChannelDefaults|null  $slack = null
     ) {
         $this->webHook = $webHook;
         $this->slack = $slack;
@@ -99,7 +99,7 @@ class ChannelsConfig implements ChannelsConfigInterface
     /**
      * @return SlackChatPostMessageArgumentsInterface|UseChannelDefaults|null
      */
-    public function getSlack(): ?UseChannelDefaults
+    public function getSlack(): SlackChatPostMessageArgumentsInterface|UseChannelDefaults|null
     {
         return $this->slack;
     }
@@ -107,7 +107,7 @@ class ChannelsConfig implements ChannelsConfigInterface
     /**
      * @param SlackChatPostMessageArgumentsInterface|UseChannelDefaults|null $slack
      */
-    public function setSlack(?UseChannelDefaults $slack): void
+    public function setSlack(SlackChatPostMessageArgumentsInterface|UseChannelDefaults|null $slack): void
     {
         $this->slack = $slack;
     }
@@ -115,7 +115,7 @@ class ChannelsConfig implements ChannelsConfigInterface
     /**
      * @return WebPushPropertiesInterface|UseChannelDefaults|null
      */
-    public function getWebPush(): ?UseChannelDefaults
+    public function getWebPush(): WebPushPropertiesInterface|UseChannelDefaults|null
     {
         return $this->webPush;
     }
@@ -123,7 +123,7 @@ class ChannelsConfig implements ChannelsConfigInterface
     /**
      * @param WebPushPropertiesInterface|UseChannelDefaults|null $webPush
      */
-    public function setWebPush(?UseChannelDefaults $webPush): void
+    public function setWebPush(WebPushPropertiesInterface|UseChannelDefaults|null $webPush): void
     {
         $this->webPush = $webPush;
     }
@@ -131,7 +131,7 @@ class ChannelsConfig implements ChannelsConfigInterface
     /**
      * @return AuditPropertiesInterface|UseChannelDefaults|null
      */
-    public function getAudit(): ?UseChannelDefaults
+    public function getAudit(): AuditPropertiesInterface|UseChannelDefaults|null
     {
         return $this->audit;
     }
@@ -139,7 +139,7 @@ class ChannelsConfig implements ChannelsConfigInterface
     /**
      * @param AuditPropertiesInterface|UseChannelDefaults|null $audit
      */
-    public function setAudit(?UseChannelDefaults $audit): void
+    public function setAudit(AuditPropertiesInterface|UseChannelDefaults|null $audit): void
     {
         $this->audit = $audit;
     }
@@ -147,7 +147,7 @@ class ChannelsConfig implements ChannelsConfigInterface
     /**
      * @return BellPropertiesInterface|UseChannelDefaults|null
      */
-    public function getBell(): ?UseChannelDefaults
+    public function getBell(): BellPropertiesInterface|UseChannelDefaults|null
     {
         return $this->bell;
     }
@@ -155,7 +155,7 @@ class ChannelsConfig implements ChannelsConfigInterface
     /**
      * @param BellPropertiesInterface|UseChannelDefaults|null $bell
      */
-    public function setBell(?UseChannelDefaults $bell): void
+    public function setBell(BellPropertiesInterface|UseChannelDefaults|null $bell): void
     {
         $this->bell = $bell;
     }

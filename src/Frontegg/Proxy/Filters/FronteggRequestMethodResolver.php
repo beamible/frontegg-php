@@ -3,17 +3,25 @@
 namespace Frontegg\Proxy\Filters;
 
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Promise\Create;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 
 class FronteggRequestMethodResolver implements FilterInterface
 {
-    public function __invoke(RequestInterface $request, ResponseInterface $response, callable $next)
+    /**
+     * @param callable $handler
+     * 
+     * @return callable
+     */
+    public function __invoke(callable $handler): callable
     {
-        if ($request->getMethod() !== 'OPTIONS') {
-            return $next($request, $response);
-        }
+        return function (RequestInterface $request, array $options) use ($handler): PromiseInterface {
+            if ($request->getMethod() !== 'OPTIONS') {
+                return $handler($request, $options);
+            }
 
-        return new Response(204);
+            return Create::promiseFor(new Response(204));
+        };
     }
 }

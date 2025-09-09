@@ -39,7 +39,7 @@ class FronteggCurlHttpClient implements FronteggHttpClientInterface
     /**
      * @param FronteggCurl|null $fronteggCurl
      */
-    public function __construct(FronteggCurl $fronteggCurl = null)
+    public function __construct(?FronteggCurl $fronteggCurl = null)
     {
         $this->fronteggCurl = $fronteggCurl ?: new FronteggCurl();
     }

@@ -2,7 +2,4 @@
 
 namespace Frontegg\Exception;
 
-class EventTriggerException extends FronteggSDKException
-{
-
-}
+class EventTriggerException extends FronteggSDKException {}

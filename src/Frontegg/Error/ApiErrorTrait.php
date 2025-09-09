@@ -25,7 +25,7 @@ trait ApiErrorTrait
     protected function setApiError(
         string $error,
         string $message,
-        int $statusCode = null
+        ?int $statusCode = null
     ): void {
         $this->apiError = new ApiError(
             $error,

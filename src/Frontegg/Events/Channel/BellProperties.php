@@ -70,20 +70,20 @@ class BellProperties extends UseChannelDefaults implements BellPropertiesInterfa
     /**
      * Actions list to show in the notification.
      *
-     * @var BellActionInterface[]
+     * @var array<DateTime|BellActionInterface|int>
      */
     protected $actions;
 
     /**
      * BellProperties constructor.
      *
-     * @param string|null           $userId
-     * @param string|null           $title
-     * @param string|null           $body
-     * @param string|null           $severity
-     * @param DateTime|null         $expiryDate
-     * @param string|null           $url
-     * @param BellActionInterface[] $actions
+     * @param string|null                             $userId
+     * @param string|null                             $title
+     * @param string|null                             $body
+     * @param string|null                             $severity
+     * @param DateTime|null                           $expiryDate
+     * @param string|null                             $url
+     * @param array<DateTime|BellActionInterface|int> $actions
      */
     public function __construct(
         ?string $userId = null,

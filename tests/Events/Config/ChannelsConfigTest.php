@@ -196,14 +196,14 @@ class ChannelsConfigTest extends TestCase
                     "severity": "High",
                     "expiryDate": null,
                     "url": null,
-                    "actions": [
-                        {
+                    "actions": {
+                        "0": {
                             "name": "Action Name 1",
                             "url": "https://redirect.url/when/clicked/1",
                             "method": "GET",
                             "visualization": "Link"
                         }
-                    ]
+                    }
                 },
                 "audit": {
                     "severity": "High",

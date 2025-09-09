@@ -74,7 +74,7 @@ class AuditsClient
 
         $accessTokenValue = $this->getAuthenticator()
             ->getAccessToken()
-            ->getValue();
+            ?->getValue();
         $url = $this->getUrlWithQueryParams(
             $filter,
             $offset,

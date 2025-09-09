@@ -5,6 +5,8 @@ namespace Frontegg\Proxy\Adapter\FronteggHttpClient;
 use Frontegg\Http\ApiRawResponse;
 use Frontegg\HttpClient\FronteggHttpClientInterface;
 use Frontegg\Proxy\Adapter\AdapterInterface;
+use GuzzleHttp\Promise\Create;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -29,6 +31,19 @@ class FronteggAdapter implements AdapterInterface
     }
 
     /**
+     * Allow this adapter to be used as a Guzzle handler.
+     *
+     * @param RequestInterface $request
+     * @param array            $options
+     *
+     * @return PromiseInterface
+     */
+    public function __invoke(RequestInterface $request, array $options): PromiseInterface
+    {
+        return Create::promiseFor($this->send($request));
+    }
+
+    /**
      * @param RequestInterface $request
      *
      * @throws \Frontegg\Exception\FronteggSDKException
@@ -44,7 +59,7 @@ class FronteggAdapter implements AdapterInterface
             $request->getHeaders()
         );
 
-         return $this->getAdaptedPsrResponse($apiRawResponse);
+        return $this->getAdaptedPsrResponse($apiRawResponse);
     }
 
     /**

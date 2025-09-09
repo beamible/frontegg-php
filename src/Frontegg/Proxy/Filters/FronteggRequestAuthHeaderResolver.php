@@ -4,8 +4,8 @@ namespace Frontegg\Proxy\Filters;
 
 use Frontegg\Authenticator\Authenticator;
 use Frontegg\Exception\AuthenticationException;
+use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 
 class FronteggRequestAuthHeaderResolver implements FilterInterface
 {
@@ -31,31 +31,35 @@ class FronteggRequestAuthHeaderResolver implements FilterInterface
         $this->contextResolver = $contextResolver;
     }
 
-    public function __invoke(
-        RequestInterface $request,
-        ResponseInterface $response,
-        callable $next
-    ) {
-        if (!$this->authenticator->getAccessToken()) {
-            throw new AuthenticationException('Authentication problem');
-        }
+    /**
+     * @param callable $handler
+     * 
+     * @return callable
+     */
+    public function __invoke(callable $handler): callable
+    {
+        return function (RequestInterface $request, array $options) use ($handler): PromiseInterface {
+            if (!$this->authenticator->getAccessToken()) {
+                throw new AuthenticationException('Authentication problem');
+            }
 
-        $context = $this->getResolvedContext($request);
+            $context = $this->getResolvedContext($request);
 
-        $request = $request->withHeader(
-            'x-access-token',
-            $this->authenticator->getAccessToken()->getValue()
-        );
-        $request = $request->withHeader(
-            'frontegg-tenant-id',
-            $context['tenantId'] ?? ''
-        );
-        $request = $request->withHeader(
-            'frontegg-user-id',
-            $context['userId'] ?? ''
-        );
+            $request = $request->withHeader(
+                'x-access-token',
+                $this->authenticator->getAccessToken()->getValue()
+            );
+            $request = $request->withHeader(
+                'frontegg-tenant-id',
+                $context['tenantId'] ?? ''
+            );
+            $request = $request->withHeader(
+                'frontegg-user-id',
+                $context['userId'] ?? ''
+            );
 
-        return $next($request, $response);
+            return $handler($request, $options);
+        };
     }
 
     /**

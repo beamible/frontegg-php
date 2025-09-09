@@ -2,6 +2,7 @@
 
 namespace Frontegg\Proxy\Filters;
 
+use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -30,41 +31,36 @@ class FronteggResponseHeaderResolver implements FilterInterface
      */
     public function __construct(?bool $disableCors = true)
     {
-        $this->disableCors = (bool)$disableCors;
+        $this->disableCors = (bool) $disableCors;
     }
 
-    public function __invoke(
-        RequestInterface $request,
-        ResponseInterface $response,
-        callable $next
-    ) {
-        /** @var ResponseInterface $response */
-        $response = $next($request, $response);
+    /**
+     * @param callable $handler
+     * 
+     * @return callable
+     */
+    public function __invoke(callable $handler): callable
+    {
+        return function (RequestInterface $request, array $options) use ($handler): PromiseInterface {
+            return $handler($request, $options)->then(function (ResponseInterface $response) use ($request) {
+                if ($this->disableCors) {
+                    $response = $response->withoutHeader(static::HEADER_ACCESS_CONTROL_ALLOW_METHODS);
+                    $response = $response->withoutHeader(static::HEADER_ACCESS_CONTROL_ALLOW_HEADERS);
+                    $response = $response->withoutHeader(static::HEADER_ACCESS_CONTROL_ALLOW_ORIGIN);
+                    $response = $response->withoutHeader(static::HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS);
 
-        if ($this->disableCors) {
-            $response = $response->withoutHeader(
-                static::HEADER_ACCESS_CONTROL_ALLOW_METHODS
-            );
-            $response = $response->withoutHeader(
-                static::HEADER_ACCESS_CONTROL_ALLOW_HEADERS
-            );
-            $response = $response->withoutHeader(
-                static::HEADER_ACCESS_CONTROL_ALLOW_ORIGIN
-            );
-            $response = $response->withoutHeader(
-                static::HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS
-            );
+                    return $response;
+                }
 
-            return $response;
-        }
-
-        return $this->enableCors($request, $response);
+                return $this->enableCors($request, $response);
+            });
+        };
     }
 
     /**
      * Sets CORS headers if they were set in request.
      *
-     * @param RequestInterface $request
+     * @param RequestInterface  $request
      * @param ResponseInterface $response
      *
      * @return ResponseInterface

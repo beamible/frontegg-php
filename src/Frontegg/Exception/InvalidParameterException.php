@@ -2,7 +2,4 @@
 
 namespace Frontegg\Exception;
 
-class InvalidParameterException extends FronteggSDKException
-{
-
-}
+class InvalidParameterException extends FronteggSDKException {}
