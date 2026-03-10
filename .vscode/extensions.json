@@ -1,6 +1,6 @@
 {
     "recommendations": [
-        "DEVSENSE.intelli-php-vscode",
+        "bmewburn.vscode-intelephense-client",
         "kasik96.latte",
         "SanderRonde.phpstan-vscode"
     ]
